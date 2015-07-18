@@ -1,0 +1,34 @@
+{
+  "name": "lostboys",
+  "version": "0.0.0",
+  "description": "lostboys rpg",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "bower install",
+    "prestart": "npm install",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eddiehobbes/lostboys.git"
+  },
+  "author": "fossilized",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eddiehobbes/lostboys/issues"
+  },
+  "homepage": "https://github.com/eddiehobbes/lostboys",
+  "dependencies": {},
+  "devDependencies": {
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-inject": "^1.3.1",
+    "gulp-load-plugins": "^0.10.0",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.37",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.6",
+    "protractor": "^2.1.0"
+  }
+}
