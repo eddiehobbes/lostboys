@@ -35,6 +35,7 @@
     "karma": "^0.12.37",
     "karma-chrome-launcher": "^0.2.0",
     "karma-jasmine": "^0.3.6",
+    "main-bower-files": "^2.9.0",
     "protractor": "^2.1.0"
   }
 }

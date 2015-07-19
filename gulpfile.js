@@ -4,67 +4,71 @@ var del = require('del');
 var inject = require('gulp-inject')
 var angularFilesort = require('gulp-angular-filesort')
 var plugins = require('gulp-load-plugins');
-// var sourcemaps = require('gulp-sourcemaps');
 var browserSync = require('browser-sync').create();
 var sass = require('gulp-sass');
 var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var eslint = require('gulp-eslint');
+var rename = require('gulp-rename');
+var bowerFiles = require('main-bower-files');
 
 var paths = {
-    scripts: 'src/**/*.js',
-    home: './src/fossilized/',
-    targetIndex: './src/fossilized/index.html',
-    build: './build',
+    scripts: './src/**/*.js',
+    css: './src/resources/**/*.css',
     sass: './src/resources/**/*.scss',
-    finalCSS: './serve/',
-    dist: './dist/',
-    serveTarget: './serve/'
+    fBower : './bower_components',
+    partials: ['./src/fossilized/**/*.js', '!./src/fossilized/index.html'],
+    home: './src/fossilized/',
+    temp: './.temp/', // pipe dumping ground
+    dist: './.dist/', // ready for distribution
+    serve: './.serve/' // dev server
 };
+
+var reuse = {}
 
 gulp.task('index', function() {
     var target = gulp.src(paths.home + 'index.html');
     var sources = gulp.src([paths.scripts])
+        .pipe(gulp.dest(paths.serve))
         .pipe(angularFilesort());
 
-    return target.pipe(inject(sources))
-        .pipe(gulp.dest(paths.serveTarget));
-});
-
-gulp.task('javascript', function() {
-    gulp.src(paths.scripts)
-        .pipe(sourcemaps.init())
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(paths.distDev));
+    return target.pipe(inject(sources,{read:false}, {relative:true}))
+        .pipe(gulp.dest(paths.serve));
 });
 
 gulp.task('js', function() {
     gulp.src(paths.scripts)
-        .pipe(browserify())
+        .pipe(gulp.dest(paths.serve))
         .pipe(uglify())
-        .pipe(gulp.dest(paths.distDev));
+        .pipe(rename({ extname: '.min.js'}))
+        .pipe(gulp.dest(paths.dist))
 });
-
-//browserify
 
 //Build css from sass
-gulp.task('sass', function() {
+gulp.task('dev-sass', function() {
   return gulp.src(paths.sass)
     .pipe(sass())
-    .pipe(gulp.dest(paths.finalCSS))
+    .pipe(gulp.dest(paths.serve))
 });
-
 
 //Need to lint
 gulp.task('lint', function() {
     return gulp.src([paths.scripts])
     .pipe(eslint())
     .pipe(eslint.format());
-})
+});
 
 //Need to uglify and rename .min
 
 //Need to clean build
+gulp.task('clean', function() {
+    del([
+        paths.temp + '**/*',
+        paths.dist + '**/*',
+        paths.serve + '**/*'
+    ]);
+});
+
 
 //Need to run watches
 gulp.task('js-watch', ['js'], browserSync.reload);
@@ -75,7 +79,7 @@ gulp.task('js-watch', ['js'], browserSync.reload);
 gulp.task('serve', ['lint', 'index', 'sass'], function() {
     browserSync.init({
       server: {
-        baseDir: paths.serveTarget
+        baseDir: paths.serve
         }
     });
 
