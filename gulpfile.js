@@ -1,3 +1,8 @@
+//Notes
+// See if basedir works with files outside of it (probably does)
+// Copy the index file to .serve
+// inject relative to .serve/index.html
+
 
 var gulp = require('gulp');
 var del = require('del');
@@ -10,33 +15,50 @@ var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var eslint = require('gulp-eslint');
 var rename = require('gulp-rename');
-var bowerFiles = require('main-bower-files');
+var mainBowerFiles = require('main-bower-files');
+var print = require('gulp-print');
+var debug = require('gulp-debug');
+var es = require('event-stream');
+var karma = require('karma').server;
+
 
 var paths = {
     scripts: './src/**/*.js',
     css: './src/resources/**/*.css',
     sass: './src/resources/**/*.scss',
     fBower : './bower_components',
-    partials: ['./src/fossilized/**/*.js', '!./src/fossilized/index.html'],
+    partials: ['./src/**/*.html', '!./src/fossilized/index.html'],
     home: './src/fossilized/',
+    homeIndex: './src/fossilized/index.html',
+    allFiles: '**/*',
+    serveScripts: '.serve/fossilized/**/*.js',
+    serveCss: './.serve/**/*.css',
     temp: './.temp/', // pipe dumping ground
     dist: './.dist/', // ready for distribution
-    serve: './.serve/' // dev server
+    serve: '.serve/', // dev server
+    jsFiles: '**/*.js',
+    cssFiles: '**/*.css',
+    karmaCfg: 'karma.conf.js'
 };
 
-var reuse = {}
+gulp.task('index', ['js', 'sass'], function() {
+    var target = gulp.src(paths.home + 'index.html')
+        .pipe(gulp.dest(paths.serve));
 
-gulp.task('index', function() {
-    var target = gulp.src(paths.home + 'index.html');
-    var sources = gulp.src([paths.scripts])
-        .pipe(gulp.dest(paths.serve))
-        .pipe(angularFilesort());
+    var css = gulp.src(paths.cssFiles, {relative: true, cwd: paths.serve});
 
-    return target.pipe(inject(sources,{read:false}, {relative:true}))
+    var sources = gulp.src([
+        paths.jsFiles
+    ], {relative: true, cwd: paths.serve})
+        .pipe(angularFilesort())
+
+    var vendor = gulp.src(mainBowerFiles({paths: { bowerDirectory: 'bower_components', bowerJson: 'bower.json', bowerrc: '.bowerrc'}}), { cwd: paths.serve});
+
+    return target.pipe(inject(es.merge(sources, vendor, css)))
         .pipe(gulp.dest(paths.serve));
 });
 
-gulp.task('js', function() {
+gulp.task('js', ['partials'], function() {
     gulp.src(paths.scripts)
         .pipe(gulp.dest(paths.serve))
         .pipe(uglify())
@@ -44,9 +66,15 @@ gulp.task('js', function() {
         .pipe(gulp.dest(paths.dist))
 });
 
+gulp.task('partials', function() {
+    gulp.src(paths.partials)
+        .pipe(print())
+        .pipe(gulp.dest(paths.serve));
+})
+
 //Build css from sass
-gulp.task('dev-sass', function() {
-  return gulp.src(paths.sass)
+gulp.task('sass', function() {
+  return gulp.src(paths.sass, {base: './src/resources/'})
     .pipe(sass())
     .pipe(gulp.dest(paths.serve))
 });
@@ -58,36 +86,34 @@ gulp.task('lint', function() {
     .pipe(eslint.format());
 });
 
-//Need to uglify and rename .min
-
 //Need to clean build
 gulp.task('clean', function() {
     del([
-        paths.temp + '**/*',
-        paths.dist + '**/*',
-        paths.serve + '**/*'
+        paths.temp + paths.allFiles,
+        paths.dist + paths.allFiles,
+        paths.serve + paths.allFiles
     ]);
 });
 
 
 //Need to run watches
-gulp.task('js-watch', ['js'], browserSync.reload);
+//Need to reload on file changes
+gulp.task('js-watch', ['index'], browserSync.reload);
 
 //Need to start server
-
-//Need to reload on file changes
-gulp.task('serve', ['lint', 'index', 'sass'], function() {
+gulp.task('serve', ['lint', 'index'], function() {
     browserSync.init({
       server: {
         baseDir: paths.serve
         }
     });
-
-    gulp.watch(paths.scripts, ['js-watch']);
-
+    gulp.watch(paths.scripts, ['clean', 'test', 'js-watch']);
 });
 
 //Need to run tests
 gulp.task('test', ['lint'], function() {
-
+    karma.start({
+        configFile: paths.karmaCfg,
+        singleRun: true
+    })
 });
