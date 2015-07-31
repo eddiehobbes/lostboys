@@ -3,7 +3,6 @@
 // Copy the index file to .serve
 // inject relative to .serve/index.html
 
-
 var gulp = require('gulp');
 var del = require('del');
 var inject = require('gulp-inject')
@@ -23,32 +22,33 @@ var karma = require('karma').server;
 
 
 var paths = {
+    baseResources: './src/resources',
+    serveSource: 'fossilized',
     scripts: './src/**/*.js',
     css: './src/resources/**/*.css',
     sass: './src/resources/**/*.scss',
-    fBower : './bower_components',
     partials: ['./src/**/*.html', '!./src/fossilized/index.html'],
     home: './src/fossilized/',
-    homeIndex: './src/fossilized/index.html',
     allFiles: '**/*',
-    serveScripts: '.serve/fossilized/**/*.js',
-    serveCss: './.serve/**/*.css',
+    serveCss: 'styles/**/*.css',
     temp: './.temp/', // pipe dumping ground
     dist: './.dist/', // ready for distribution
     serve: '.serve/', // dev server
     jsFiles: '**/*.js',
     cssFiles: '**/*.css',
-    karmaCfg: 'karma.conf.js'
+    allFiles: '**/*',
+    karmaCfg: 'karma.conf.js',
+    bowerFolder: 'bower_components'
 };
 
 gulp.task('index', ['js', 'sass'], function() {
     var target = gulp.src(paths.home + 'index.html')
         .pipe(gulp.dest(paths.serve));
 
-    var css = gulp.src(paths.cssFiles, {relative: true, cwd: paths.serve});
+    var css = gulp.src(paths.serveCss, {relative: true, cwd: paths.serve});
 
     var sources = gulp.src([
-        paths.jsFiles
+        serveSource + paths.jsFiles
     ], {relative: true, cwd: paths.serve})
         .pipe(angularFilesort())
 
@@ -64,6 +64,13 @@ gulp.task('js', ['partials'], function() {
         .pipe(uglify())
         .pipe(rename({ extname: '.min.js'}))
         .pipe(gulp.dest(paths.dist))
+
+    gulp.src(paths.bowerFolder + '/' + paths.allFiles)
+        .pipe(gulp.dest(paths.serve + '/' + paths.bowerFolder));
+});
+
+gulp.task('bowertest', function() {
+
 });
 
 gulp.task('partials', function() {
@@ -74,7 +81,7 @@ gulp.task('partials', function() {
 
 //Build css from sass
 gulp.task('sass', function() {
-  return gulp.src(paths.sass, {base: './src/resources/'})
+  return gulp.src(paths.sass, {base: baseResources})
     .pipe(sass())
     .pipe(gulp.dest(paths.serve))
 });
@@ -104,7 +111,7 @@ gulp.task('js-watch', ['index'], browserSync.reload);
 gulp.task('serve', ['lint', 'index'], function() {
     browserSync.init({
       server: {
-        baseDir: paths.serve
+          baseDir: paths.serve
         }
     });
     gulp.watch(paths.scripts, ['clean', 'test', 'js-watch']);
