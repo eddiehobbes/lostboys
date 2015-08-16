@@ -37,7 +37,7 @@ var paths = {
     jsFiles: '**/*.js',
     cssFiles: '**/*.css',
     allFiles: '**/*',
-    karmaCfg: 'karma.conf.js',
+    karmaCfg: '/karma.conf.js',
     bowerFolder: 'bower_components'
 };
 
@@ -48,7 +48,7 @@ gulp.task('index', ['js', 'sass'], function() {
     var css = gulp.src(paths.serveCss, {relative: true, cwd: paths.serve});
 
     var sources = gulp.src([
-        serveSource + paths.jsFiles
+        paths.serveSource + paths.jsFiles
     ], {relative: true, cwd: paths.serve})
         .pipe(angularFilesort())
 
@@ -81,15 +81,16 @@ gulp.task('partials', function() {
 
 //Build css from sass
 gulp.task('sass', function() {
-  return gulp.src(paths.sass, {base: baseResources})
+  return gulp.src(paths.sass, {base: paths.baseResources})
     .pipe(sass())
     .pipe(gulp.dest(paths.serve))
 });
 
-//Need to lint
 gulp.task('lint', function() {
     return gulp.src([paths.scripts])
-    .pipe(eslint())
+    .pipe(eslint({
+        config: 'eslint.conf.json'
+    }))
     .pipe(eslint.format());
 });
 
@@ -120,7 +121,7 @@ gulp.task('serve', ['lint', 'index'], function() {
 //Need to run tests
 gulp.task('test', ['lint'], function() {
     karma.start({
-        configFile: paths.karmaCfg,
+        configFile: __dirname + paths.karmaCfg,
         singleRun: true
     })
 });
