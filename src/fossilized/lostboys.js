@@ -4,7 +4,8 @@ var angular = require('angular');
     'use strict';
 
     angular.module('lostboys', [
-        'ui-router'
+        'ui-router',
+        'fossilized.engine.view'
     ]).config(config);
 
     function config($stateProvider, $urlRouterProvider) {
