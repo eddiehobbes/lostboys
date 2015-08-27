@@ -1,10 +1,10 @@
-var angular = require('angular');
+// var angular = require('angular');
 
 (function(angular) {
     'use strict';
 
     angular.module('lostboys', [
-        'ui-router',
+        'ui.router',
         'fossilized.engine.view'
     ]).config(config);
 
