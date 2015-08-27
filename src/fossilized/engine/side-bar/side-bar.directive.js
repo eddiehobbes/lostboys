@@ -1,13 +1,14 @@
 (function(angular) {
+    'use strict';
     angular.module('fossilized.engine.view')
         .directive('sideBar', function() {
             return {
                 restrict: 'E',
-                templateUrl: 'engine/side-bar/side-bar.html',
+                templateUrl: 'fossilized/engine/side-bar/side-bar.html',
                 controller: 'SideBarController',
                 controllerAs: 'vm',
                 bindToController: true,
-                scope : {}
+                scope: {}
             };
         });
 })(angular);
