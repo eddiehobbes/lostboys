@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+
+  <title></title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+
+  <% if (webpackConfig.metadata.ENV === 'development') { %>
+  <!-- Webpack Dev Server reload -->
+  <script src="/webpack-dev-server.js"></script>
+  <% } %>
+  <lostboys-app></lostboys-app>
+</body>
+</html>
