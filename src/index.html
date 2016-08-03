@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-
+  <base href="/">
   <title></title>
 
   <meta charset="utf-8">
@@ -15,6 +15,7 @@
   <% if (webpackConfig.metadata.ENV === 'development') { %>
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
+  <link rel="stylesheet" href="styles.css">
   <% } %>
   <lostboys-app></lostboys-app>
 </body>
