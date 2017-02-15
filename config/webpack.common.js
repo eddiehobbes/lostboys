@@ -50,8 +50,8 @@ module.exports = {
   entry: {
 
     'polyfills': './src/polyfills.ts',
-    'vendor': './src/vendor.ts',
-    'main': './src/app/main.ts'
+    // 'vendor': './src/vendor.ts',
+    'main': './src/app/main.ts',
 
   },
 
@@ -96,7 +96,7 @@ module.exports = {
        *
        * See: https://github.com/wbuchwalter/tslint-loader
        */
-       // { test: /\.ts$/, loader: 'tslint-loader', exclude: [ helpers.root('node_modules') ] },
+       { test: /\.ts$/, loader: 'tslint-loader', exclude: [ helpers.root('node_modules') ] },
 
       /*
        * Source map loader support for *.js files
@@ -167,6 +167,22 @@ module.exports = {
         test: /\.html$/,
         loader: 'raw-loader',
         exclude: [helpers.root('src/index.html')]
+      },
+
+      /**
+       * sass loader
+       */
+      {
+        test: /\.scss/,
+        loaders: ['raw-loader', 'sass-loader']
+      },
+
+      /**
+       * image loader
+       */
+      {
+        test: /\.(tff|eot|png|jpg|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+        loader: 'file-loader'
       }
 
     ]

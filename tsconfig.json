@@ -19,6 +19,7 @@
     "src/custom-typings.d.ts",
     "typings/browser.d.ts"
   ],
+  "baseUrl": "src/app/",
   "awesomeTypescriptLoaderOptions": {
     "resolveGlobs": true,
     "forkChecker": true

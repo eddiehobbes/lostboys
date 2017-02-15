@@ -52,12 +52,23 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "angular2": "2.0.0-beta.15",
+    "@angular/common": "^2.4.5",
+    "@angular/compiler": "^2.4.5",
+    "@angular/core": "^2.4.5",
+    "@angular/forms": "^2.4.5",
+    "@angular/http": "^2.4.5",
+    "@angular/material": "^2.0.0-beta.1",
+    "@angular/platform-browser": "^2.4.5",
+    "@angular/platform-browser-dynamic": "^2.4.5",
+    "@angular/router": "^3.4.5",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
+    "es6-shim": "^0.35.3",
+    "html-webpack-plugin": "^2.28.0",
+    "karma-mocha-reporter": "^2.2.2",
     "normalize.css": "^4.2.0",
-    "rxjs": "5.0.0-beta.2",
-    "zone.js": "~0.6.11"
+    "rxjs": "^5.1.1",
+    "zone.js": "^0.7.6"
   },
   "devDependencies": {
     "angular2-hmr": "~0.5.5",

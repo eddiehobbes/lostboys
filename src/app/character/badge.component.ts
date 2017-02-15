@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from 'angular2/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Badge} from './badge';
 import {BadgeService} from './badge.service';
 
@@ -8,11 +8,12 @@ import {BadgeService} from './badge.service';
 })
 
 export class BadgeComponent implements OnInit {
+    badges: Badge[];
+
     constructor(
         private badgeService: BadgeService
     ) {}
 
-    badges: Badge[];
 
     getBadges() {
         this.badgeService.getAllBadges()

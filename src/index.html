@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html style="height: 100%" lang="">
 <head>
   <base href="/">
   <title></title>
@@ -10,12 +10,12 @@
 
 </head>
 
-<body>
+<body style="height: 100%">
 
   <% if (webpackConfig.metadata.ENV === 'development') { %>
   <!-- Webpack Dev Server reload -->
   <script src="/webpack-dev-server.js"></script>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="vendor/css/bootstrap.min.css">
   <% } %>
   <lostboys-app></lostboys-app>
 </body>
