@@ -1,5 +1,5 @@
 ## Development
 
 ```
-npm serve:dev
+npm run serve:dev
 ```
