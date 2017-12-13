@@ -1,10 +1,4 @@
-## Angular 4 Seed Project
-
-A basic Angular 4 seed project utilizing the following technologies:
-
-The purpose of this seed project is to create an Angular environment with a little less configuration clutter. All configuration files are conveniently organized within the project's **config/** directory, instead of being strewn about the project structure and/or the project root. 
-
-This makes makes configuration files much easier to find, as well as helping keep the general project structure a lot cleaner! 
+## Lostboys
 
 * Angular 4.3.6
 * TypeScript 2.5

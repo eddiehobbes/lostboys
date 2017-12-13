@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http';
 import { APP_ROUTING } from './app.routing';
 
 import { HomeComponent } from './route/home/home.component';
+import { GuildComponent } from './module/guild/guild.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import { HomeComponent } from './route/home/home.component';
     ],
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        GuildComponent
     ],
     bootstrap: [
         AppComponent
